@@ -21,7 +21,7 @@
     "claude-code",
     "api-provider"
   ],
-  "author": "Selenium39",
+  "author": "Selenium39 <selenium39@qq.com>",
   "license": "MIT",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
