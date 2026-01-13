@@ -1,0 +1,80 @@
+{
+  "name": "ClaudeCodeX",
+  "version": "1.0.0",
+  "description": "A menu bar application for switching Claude Code API providers",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:electron": "tsc -p tsconfig.main.json",
+    "electron": "electron .",
+    "devx": "concurrently -k \"vite\" \"pnpm run build:electron && sleep 2 && NODE_ENV=development electron .\"",
+    "buildx": "pnpm run build && pnpm run build:electron && electron-builder",
+    "build:all": "pnpm run build && pnpm run build:electron && electron-builder -mwl",
+    "build:win": "pnpm run build && pnpm run build:electron && electron-builder --win",
+    "build:mac": "pnpm run build && pnpm run build:electron && electron-builder --mac",
+    "build:linux": "pnpm run build && pnpm run build:electron && electron-builder --linux",
+    "fix": "electron-fix start"
+  },
+  "keywords": [
+    "electron",
+    "claude-code",
+    "api-provider"
+  ],
+  "author": "Selenium39",
+  "license": "MIT",
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "@types/node": "^25.0.6",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.4.0",
+    "electron-store": "^11.0.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "build": {
+    "appId": "com.selenium39.ClaudeCodeX",
+    "productName": "ClaudeCodeX",
+    "directories": {
+      "output": "release"
+    },
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
+    },
+    "files": [
+      "dist/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "src/renderer/assets/Icon.png",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "icon": "src/renderer/assets/Icon.png",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "icon": "src/renderer/assets/Icon.png",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5"
+  }
+}
