@@ -45,6 +45,16 @@ pnpm run devx
 pnpm run build:all
 ```
 
+## 常见问题
+
+### macOS 提示"应用已损坏，无法打开"？
+
+由于 macOS 的安全机制，非 App Store 下载的应用可能会触发此提示。您可以在终端中运行以下命令快速修复：
+
+```bash
+sudo xattr -rd com.apple.quarantine "/Applications/ClaudeCodeX.app"
+```
+
 ## 使用方法
 
 1. 启动 ClaudeCodeX 应用

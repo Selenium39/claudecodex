@@ -45,6 +45,16 @@ pnpm run devx
 pnpm run build:all
 ```
 
+## FAQ
+
+### macOS: "App is damaged and can't be opened"
+
+Due to macOS security mechanisms, apps downloaded outside the App Store may trigger this warning. You can fix it by running the following command in Terminal:
+
+```bash
+sudo xattr -rd com.apple.quarantine "/Applications/ClaudeCodeX.app"
+```
+
 ## Usage
 
 1. Launch the ClaudeCodeX application
