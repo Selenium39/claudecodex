@@ -12,6 +12,10 @@ ClaudeCodeX is a lightweight menu bar application designed to help users conveni
 - 🎨 Clean and simple menu bar interface
 - ⚙️ Configuration file management
 
+## Screenshot
+
+![ClaudeCodeX Screenshot](https://storage.like.do/2026/01/13/claudecodex_1768296644447_5drg587pukk.png)
+
 ## Installation
 
 ### Install from Release

@@ -12,6 +12,10 @@ ClaudeCodeX 是一个轻量级的菜单栏应用，旨在帮助用户方便地�
 - 🎨 简洁的菜单栏界面
 - ⚙️ 配置文件管理
 
+## 截图
+
+![ClaudeCodeX 截图](https://storage.like.do/2026/01/13/claudecodex_1768296644447_5drg587pukk.png)
+
 ## 安装
 
 ### 从发布版本安装
