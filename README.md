@@ -1,14 +1,14 @@
 # ClaudeCodeX
 
-A menu bar application for switching Claude Code API providers.
+A menu bar application for switching API providers for Claude Code and Codex.
 
 ## Introduction
 
-ClaudeCodeX is a lightweight macOS menu bar application designed to help users conveniently switch and manage Claude Code API providers.
+ClaudeCodeX is a lightweight menu bar application designed to help users conveniently switch and manage API providers for AI coding assistants, including Claude Code and Codex.
 
 ## Features
 
-- 🔄 Quickly switch between Claude Code API providers
+- 🔄 Quickly switch between AI coding assistant API providers (Claude Code, Codex)
 - 🎨 Clean and simple menu bar interface
 - ⚙️ Configuration file management
 

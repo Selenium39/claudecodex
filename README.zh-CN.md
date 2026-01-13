@@ -1,14 +1,14 @@
 # ClaudeCodeX
 
-一个用于切换 Claude Code API 提供商的菜单栏应用程序。
+一个用于切换 Claude Code 和 Codex API 提供商的菜单栏应用程序。
 
 ## 简介
 
-ClaudeCodeX 是一个轻量级的 macOS 菜单栏应用，旨在帮助用户方便地切换和管理 Claude Code 的 API 提供商。
+ClaudeCodeX 是一个轻量级的菜单栏应用，旨在帮助用户方便地切换和管理 AI 编程助手的 API 提供商，包括 Claude Code 和 Codex。
 
 ## 功能特性
 
-- 🔄 快速切换 Claude Code API 提供商
+- 🔄 快速切换 AI 编程助手 API 提供商（Claude Code、Codex）
 - 🎨 简洁的菜单栏界面
 - ⚙️ 配置文件管理
 
