@@ -76,7 +76,9 @@ export function useProviderStore() {
     }
   }, [providers, loading]);
 
-  const activeProvider = providers.find((p) => p.isActive) || null;
+  // NOTE: There can be an active provider for each config type (claude/codex).
+  // When switching providers we must only consider the currently-active provider
+  // for the SAME config type, otherwise old env keys may not be cleaned up.
 
   const addProvider = useCallback((provider: Provider) => {
     setProviders((prev) => [...prev, { ...provider, isActive: false }]);
@@ -94,9 +96,12 @@ export function useProviderStore() {
 
   const activateProvider = useCallback(
     async (provider: Provider) => {
-      // Get old managed keys before activation
-      const oldManagedKeys = activeProvider
-        ? Object.keys(activeProvider.envVariables)
+      // Get old managed keys before activation (same config type only)
+      const oldProviderSameType = providers.find(
+        (p) => p.isActive && p.configType === provider.configType
+      );
+      const oldManagedKeys = oldProviderSameType
+        ? Object.keys(oldProviderSameType.envVariables)
         : [];
 
       // Update providers state - only affect providers of the same config type
@@ -130,12 +135,15 @@ export function useProviderStore() {
 
       setActiveProviderId(provider.id);
     },
-    [activeProvider]
+    [providers]
   );
 
   const deactivateAllProviders = useCallback(async () => {
-    const oldManagedKeys = activeProvider
-      ? Object.keys(activeProvider.envVariables)
+    const oldProviderSameType = providers.find(
+      (p) => p.isActive && p.configType === configType
+    );
+    const oldManagedKeys = oldProviderSameType
+      ? Object.keys(oldProviderSameType.envVariables)
       : [];
 
     // Only deactivate providers of the current config type
@@ -152,7 +160,7 @@ export function useProviderStore() {
     }
 
     setActiveProviderId('');
-  }, [activeProvider, configType]);
+  }, [providers, configType]);
 
   const checkTokenDuplicate = useCallback(
     (token: string, baseURL: string, excludingID?: string): TokenCheckResult => {
