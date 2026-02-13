@@ -1,6 +1,6 @@
 {
   "name": "ClaudeCodeX",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A menu bar application for switching Claude Code API providers",
   "main": "dist/main/index.js",
   "scripts": {

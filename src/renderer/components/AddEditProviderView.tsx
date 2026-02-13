@@ -165,20 +165,9 @@ export const AddEditProviderView: React.FC<AddEditProviderViewProps> = ({
   };
 
   const saveProvider = () => {
-    // Filter out empty model env variables
+    // Keep all env variables as-is, including empty model fields
+    // This allows users to edit model fields later even if they're empty
     const cleanedEnvVariables = { ...envVariables };
-    const modelKeys = configType === 'codex'
-      ? ['CODEX_MODEL', 'CODEX_MODEL_PROVIDER', 'CODEX_REASONING_EFFORT']
-      : [
-          'ANTHROPIC_DEFAULT_HAIKU_MODEL',
-          'ANTHROPIC_DEFAULT_SONNET_MODEL',
-          'ANTHROPIC_DEFAULT_OPUS_MODEL',
-        ];
-    for (const key of modelKeys) {
-      if (cleanedEnvVariables[key] && !cleanedEnvVariables[key].value) {
-        delete cleanedEnvVariables[key];
-      }
-    }
 
     const baseUrlKey = configType === 'codex' ? 'CODEX_BASE_URL' : 'ANTHROPIC_BASE_URL';
     const newProvider: Provider = {

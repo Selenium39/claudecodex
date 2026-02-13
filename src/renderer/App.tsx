@@ -8,6 +8,7 @@ import { AddEditProviderView } from './components/AddEditProviderView';
 import { ProviderIcon } from './components/ProviderIcon';
 import { loadTemplates } from './types/templates';
 import AppIcon from './assets/Icon.png';
+import packageJson from '../../package.json';
 import './App.css';
 
 const isElectron = typeof window !== 'undefined' && window.electronAPI;
@@ -175,7 +176,7 @@ export const App: React.FC = () => {
         >
           ☕
         </button>
-        <span className="version">ClaudeCodeX v1.0.0</span>
+        <span className="version">ClaudeCodeX v{packageJson.version}</span>
         <button
           className="footer-button quit"
           onClick={() => setShowQuitConfirm(true)}
