@@ -1,79 +1,7 @@
 // Provider Templates for ClaudeCodeX Electron
-// Templates are now loaded from providers.json file
+// Templates are loaded from providers.json file
 
 import { ProviderTemplate, createEnvValue, ConfigType, EnvValue } from './index';
-
-// Default templates (fallback when JSON file is not available)
-const DEFAULT_CLAUDE_TEMPLATES: ProviderTemplate[] = [
-  {
-    name: 'Zhipu AI',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://open.bigmodel.cn/api/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('glm-4.5-air', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('glm-4.7', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('glm-4.7', 'string'),
-    },
-    icon: 'ZhipuLogo',
-    docLink: 'https://docs.bigmodel.cn/cn/coding-plan/tool/claude',
-    configType: 'claude',
-  },
-  {
-    name: 'MiniMax.com',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.minimaxi.com/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('MiniMax-M2', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('MiniMax-M2', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('MiniMax-M2', 'string'),
-      API_TIMEOUT_MS: createEnvValue('3000000', 'integer'),
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: createEnvValue('1', 'boolean'),
-    },
-    icon: 'MiniMaxLogo',
-    docLink: 'https://platform.minimaxi.com/docs/guides/text-ai-coding-tools',
-    configType: 'claude',
-  },
-  {
-    name: 'Moonshot AI',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.moonshot.cn/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('kimi-k2-turbo-preview', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('kimi-k2-turbo-preview', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('kimi-k2-turbo-preview', 'string'),
-    },
-    icon: 'MoonshotLogo',
-    docLink: 'https://platform.moonshot.cn/docs/guide/agent-support',
-    configType: 'claude',
-  },
-  {
-    name: 'Custom AI',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('', 'string'),
-    },
-    icon: 'OtherLogo',
-    configType: 'claude',
-  },
-];
-
-const DEFAULT_CODEX_TEMPLATES: ProviderTemplate[] = [
-  {
-    name: 'Custom Codex',
-    envVariables: {
-      CODEX_BASE_URL: createEnvValue('', 'string'),
-      CODEX_API_KEY: createEnvValue('', 'string'),
-      CODEX_MODEL: createEnvValue('gpt-5.2-codex', 'string'),
-      CODEX_MODEL_PROVIDER: createEnvValue('custom', 'string'),
-      CODEX_REASONING_EFFORT: createEnvValue('medium', 'string'),
-    },
-    icon: 'OtherLogo',
-    configType: 'codex',
-  },
-];
 
 // Raw template data from JSON (without configType)
 interface RawProviderTemplate {
@@ -105,29 +33,37 @@ function convertRawTemplate(raw: RawProviderTemplate, configType: ConfigType): P
   };
 }
 
-// Global template cache
-let CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [...DEFAULT_CLAUDE_TEMPLATES];
-let CODEX_PROVIDER_TEMPLATES: ProviderTemplate[] = [...DEFAULT_CODEX_TEMPLATES];
+// Global template cache (starts empty, loaded from JSON)
+let CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [];
+let CODEX_PROVIDER_TEMPLATES: ProviderTemplate[] = [];
 let templatesLoaded = false;
 
 // Load templates from JSON file (called from main process)
 export function loadTemplatesFromJson(jsonData: ProvidersJson): void {
-  const claude = jsonData.claude?.map(t => convertRawTemplate(t, 'claude')) || DEFAULT_CLAUDE_TEMPLATES;
-  const codex = jsonData.codex?.map(t => convertRawTemplate(t, 'codex')) || DEFAULT_CODEX_TEMPLATES;
-  
-  CLAUDE_PROVIDER_TEMPLATES = claude;
-  CODEX_PROVIDER_TEMPLATES = codex;
+  console.log('📥 Loading templates from JSON:', {
+    claude: jsonData.claude?.length || 0,
+    codex: jsonData.codex?.length || 0
+  });
+  CLAUDE_PROVIDER_TEMPLATES = jsonData.claude?.map(t => convertRawTemplate(t, 'claude')) || [];
+  CODEX_PROVIDER_TEMPLATES = jsonData.codex?.map(t => convertRawTemplate(t, 'codex')) || [];
   templatesLoaded = true;
+  console.log('✅ Templates loaded:', {
+    claude: CLAUDE_PROVIDER_TEMPLATES.length,
+    codex: CODEX_PROVIDER_TEMPLATES.length
+  });
 }
 
 // Async load templates from Electron main process
 export async function loadTemplates(): Promise<void> {
+  console.log('🔄 loadTemplates called, templatesLoaded:', templatesLoaded);
   if (templatesLoaded) return;
   
   const isElectron = typeof window !== 'undefined' && window.electronAPI;
+  console.log('🔄 isElectron:', isElectron);
   if (isElectron) {
     try {
       const data = await window.electronAPI.readTemplates();
+      console.log('🔄 Received data from main:', data);
       loadTemplatesFromJson(data as ProvidersJson);
     } catch (error) {
       console.error('Failed to load templates:', error);
@@ -150,13 +86,12 @@ export function getTemplatesByType(configType: ConfigType): ProviderTemplate[] {
   return configType === 'codex' ? CODEX_PROVIDER_TEMPLATES : CLAUDE_PROVIDER_TEMPLATES;
 }
 
-// Combined templates for backward compatibility
-export const PROVIDER_TEMPLATES: ProviderTemplate[] = [
-  ...CLAUDE_PROVIDER_TEMPLATES,
-  ...CODEX_PROVIDER_TEMPLATES,
-];
+// Combined templates
+export function getAllTemplates(): ProviderTemplate[] {
+  return [...CLAUDE_PROVIDER_TEMPLATES, ...CODEX_PROVIDER_TEMPLATES];
+}
 
-// Re-export for compatibility (these will be updated after loadTemplates is called)
+// Re-export for compatibility
 export { CLAUDE_PROVIDER_TEMPLATES, CODEX_PROVIDER_TEMPLATES };
 
 export function inferIconFromUrl(baseUrl: string): string {
@@ -167,7 +102,7 @@ export function inferIconFromUrl(baseUrl: string): string {
     const host = url.host.replace(/^www\./, '');
 
     // Match with template hosts first
-    const allTemplates = [...CLAUDE_PROVIDER_TEMPLATES, ...CODEX_PROVIDER_TEMPLATES];
+    const allTemplates = getAllTemplates();
     for (const template of allTemplates) {
       const templateUrl = template.envVariables.ANTHROPIC_BASE_URL?.value || template.envVariables.CODEX_BASE_URL?.value;
       if (templateUrl) {
@@ -209,7 +144,7 @@ export function inferTemplateFromProvider(envVariables: Record<string, { value: 
 
   try {
     const providerHost = new URL(baseUrl).host.replace(/^www\./, '');
-    const allTemplates = [...CLAUDE_PROVIDER_TEMPLATES, ...CODEX_PROVIDER_TEMPLATES];
+    const allTemplates = getAllTemplates();
 
     return allTemplates.find((template) => {
       const templateUrl = template.envVariables.ANTHROPIC_BASE_URL?.value || template.envVariables.CODEX_BASE_URL?.value;

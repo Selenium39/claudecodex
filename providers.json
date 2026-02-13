@@ -39,7 +39,7 @@
       "docLink": "https://www.kimi.com/code/docs/more/third-party-agents.html"
     },
     {
-      "name": "Custom AI",
+      "name": "Custom ClaudeCode",
       "envVariables": {
         "ANTHROPIC_BASE_URL": { "value": "", "type": "string" },
         "ANTHROPIC_AUTH_TOKEN": { "value": "", "type": "string" },

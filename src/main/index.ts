@@ -33,13 +33,28 @@ const CODEX_BACKUP_PATH = path.join(CODEX_DIR, 'config.toml.backup');
 const STORE_PATH = path.join(app.getPath('userData'), 'providers.json');
 
 // Path for provider templates JSON
+// Try multiple possible locations
 const PROVIDER_TEMPLATES_PATH = (() => {
-  const isDev = process.env.NODE_ENV === 'development';
-  if (isDev) {
-    return path.join(__dirname, '../../providers.json');
+  const possiblePaths = [
+    // Development: from src/main
+    path.join(__dirname, '../..', 'providers.json'),
+    // Development: from dist/main  
+    path.join(__dirname, '..', '..', 'providers.json'),
+    // Production: app root
+    path.join(app.getAppPath(), 'providers.json'),
+    // Production: resources
+    path.join(process.resourcesPath || app.getAppPath(), 'providers.json'),
+  ];
+  
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      console.log('✅ Found providers.json at:', p);
+      return p;
+    }
   }
-  // In production, look in the app resources directory
-  return path.join(process.resourcesPath || app.getAppPath(), 'providers.json');
+  
+  // Return first option as default (will fail gracefully later)
+  return possiblePaths[0];
 })();
 
 // Store current config type (claude or codex)
@@ -124,22 +139,22 @@ function readProviders(): unknown[] {
 // Read provider templates from JSON file
 function readProviderTemplates(): { claude: unknown[]; codex: unknown[] } {
   try {
-    // First try the user data directory (for user customizations)
-    const userTemplatesPath = path.join(app.getPath('userData'), 'providers.json');
-    let data: string;
+    // Note: We intentionally do NOT use the userData directory here
+    // because that's where user providers are stored (STORE_PATH)
+    // Templates are always loaded from the app bundle
+    console.log('🔍 Looking for provider templates at:', PROVIDER_TEMPLATES_PATH);
     
-    if (fs.existsSync(userTemplatesPath)) {
-      data = fs.readFileSync(userTemplatesPath, 'utf-8');
-      console.log('✅ Loaded provider templates from user data');
-    } else if (fs.existsSync(PROVIDER_TEMPLATES_PATH)) {
-      data = fs.readFileSync(PROVIDER_TEMPLATES_PATH, 'utf-8');
-      console.log('✅ Loaded provider templates from app bundle');
-    } else {
-      console.warn('⚠️ Provider templates JSON not found, using defaults');
+    if (!fs.existsSync(PROVIDER_TEMPLATES_PATH)) {
+      console.warn('⚠️ Provider templates JSON not found at:', PROVIDER_TEMPLATES_PATH);
       return { claude: [], codex: [] };
     }
     
+    const data = fs.readFileSync(PROVIDER_TEMPLATES_PATH, 'utf-8');
     const parsed = JSON.parse(data);
+    console.log('✅ Loaded templates:', {
+      claude: parsed.claude?.length || 0,
+      codex: parsed.codex?.length || 0
+    });
     return {
       claude: parsed.claude || [],
       codex: parsed.codex || [],

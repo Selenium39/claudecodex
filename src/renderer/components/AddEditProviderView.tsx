@@ -98,19 +98,10 @@ export const AddEditProviderView: React.FC<AddEditProviderViewProps> = ({
     const template = templates[index];
     if (!template) return;
 
-    // Preserve custom variables
-    const currentCustomVars: Record<string, EnvValue> = {};
-    for (const [key, value] of Object.entries(envVariables)) {
-      if (!baseTemplateKeys.has(key)) {
-        currentCustomVars[key] = value;
-      }
-    }
-
-    // Merge template vars with custom vars
-    const mergedVars = { ...template.envVariables, ...currentCustomVars };
-
+    // Use the new template's env variables directly (no merging)
+    // This ensures model configs from previous template don't carry over
     setProviderName(template.name);
-    setEnvVariables(mergedVars);
+    setEnvVariables(template.envVariables);
     setBaseTemplateKeys(new Set(Object.keys(template.envVariables)));
   };
 
