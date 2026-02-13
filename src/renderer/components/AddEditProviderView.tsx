@@ -9,10 +9,11 @@ import {
   getEnvKeyInfo,
   createEnvValue,
   ConfigType,
+  ProviderTemplate,
 } from '../types';
 import { 
-  CLAUDE_PROVIDER_TEMPLATES,
-  CODEX_PROVIDER_TEMPLATES,
+  getTemplatesByType,
+  loadTemplates,
   inferIconFromUrl 
 } from '../types/templates';
 import './AddEditProviderView.css';
@@ -38,8 +39,9 @@ export const AddEditProviderView: React.FC<AddEditProviderViewProps> = ({
 }) => {
   const isEditing = provider !== null;
 
-  // Get templates based on config type
-  const templates = configType === 'codex' ? CODEX_PROVIDER_TEMPLATES : CLAUDE_PROVIDER_TEMPLATES;
+  // State for templates (loaded dynamically)
+  const [templates, setTemplates] = useState<ProviderTemplate[]>([]);
+  const [templatesLoading, setTemplatesLoading] = useState(true);
 
   // Initialize state based on whether we're editing or adding
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState(0);
@@ -48,6 +50,17 @@ export const AddEditProviderView: React.FC<AddEditProviderViewProps> = ({
   const [baseTemplateKeys, setBaseTemplateKeys] = useState<Set<string>>(new Set());
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
   const [duplicateResult, setDuplicateResult] = useState<TokenCheckResult | null>(null);
+
+  // Load templates on mount
+  useEffect(() => {
+    const initTemplates = async () => {
+      await loadTemplates();
+      const loadedTemplates = getTemplatesByType(configType);
+      setTemplates(loadedTemplates);
+      setTemplatesLoading(false);
+    };
+    initTemplates();
+  }, [configType]);
 
   // Custom variable state
   const [showAddCustomVar, setShowAddCustomVar] = useState(false);
@@ -66,6 +79,8 @@ export const AddEditProviderView: React.FC<AddEditProviderViewProps> = ({
   };
 
   useEffect(() => {
+    if (templatesLoading || templates.length === 0) return;
+    
     if (isEditing && provider) {
       setProviderName(provider.name);
       setEnvVariables(provider.envVariables);
@@ -76,11 +91,12 @@ export const AddEditProviderView: React.FC<AddEditProviderViewProps> = ({
       setEnvVariables(firstTemplate.envVariables);
       setBaseTemplateKeys(new Set(Object.keys(firstTemplate.envVariables)));
     }
-  }, [provider, isEditing, templates]);
+  }, [provider, isEditing, templates, templatesLoading]);
 
   const handleTemplateChange = (index: number) => {
     setSelectedTemplateIndex(index);
     const template = templates[index];
+    if (!template) return;
 
     // Preserve custom variables
     const currentCustomVars: Record<string, EnvValue> = {};

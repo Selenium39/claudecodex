@@ -1,0 +1,66 @@
+{
+  "claude": [
+    {
+      "name": "GLM Coding Plan",
+      "envVariables": {
+        "ANTHROPIC_BASE_URL": { "value": "https://open.bigmodel.cn/api/anthropic", "type": "string" },
+        "ANTHROPIC_AUTH_TOKEN": { "value": "", "type": "string" },
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": { "value": "glm-4.5-air", "type": "string" },
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": { "value": "glm-4.7", "type": "string" },
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": { "value": "glm-4.7", "type": "string" }
+      },
+      "icon": "ZhipuLogo",
+      "docLink": "https://docs.bigmodel.cn/cn/coding-plan/tool/claude"
+    },
+    {
+      "name": "MiniMax Coding Plan",
+      "envVariables": {
+        "ANTHROPIC_BASE_URL": { "value": "https://api.minimaxi.com/anthropic", "type": "string" },
+        "ANTHROPIC_AUTH_TOKEN": { "value": "", "type": "string" },
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": { "value": "MiniMax-M2.5", "type": "string" },
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": { "value": "MiniMax-M2.5", "type": "string" },
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": { "value": "MiniMax-M2.5", "type": "string" },
+        "API_TIMEOUT_MS": { "value": "3000000", "type": "integer" },
+        "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": { "value": "1", "type": "boolean" }
+      },
+      "icon": "MiniMaxLogo",
+      "docLink": "https://platform.minimaxi.com/docs/coding-plan/intro"
+    },
+    {
+      "name": "Kimi Coding Plan",
+      "envVariables": {
+        "ANTHROPIC_BASE_URL": { "value": "https://api.kimi.com/coding/", "type": "string" },
+        "ANTHROPIC_AUTH_TOKEN": { "value": "", "type": "string" },
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": { "value": "kimi-for-coding", "type": "string" },
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": { "value": "kimi-for-coding", "type": "string" },
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": { "value": "kimi-for-coding", "type": "string" }
+      },
+      "icon": "MoonshotLogo",
+      "docLink": "https://www.kimi.com/code/docs/more/third-party-agents.html"
+    },
+    {
+      "name": "Custom AI",
+      "envVariables": {
+        "ANTHROPIC_BASE_URL": { "value": "", "type": "string" },
+        "ANTHROPIC_AUTH_TOKEN": { "value": "", "type": "string" },
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": { "value": "", "type": "string" },
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": { "value": "", "type": "string" },
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": { "value": "", "type": "string" }
+      },
+      "icon": "OtherLogo"
+    }
+  ],
+  "codex": [
+    {
+      "name": "Custom Codex",
+      "envVariables": {
+        "CODEX_BASE_URL": { "value": "", "type": "string" },
+        "CODEX_API_KEY": { "value": "", "type": "string" },
+        "CODEX_MODEL": { "value": "gpt-5.2-codex", "type": "string" },
+        "CODEX_MODEL_PROVIDER": { "value": "custom", "type": "string" },
+        "CODEX_REASONING_EFFORT": { "value": "medium", "type": "string" }
+      },
+      "icon": "OtherLogo"
+    }
+  ]
+}

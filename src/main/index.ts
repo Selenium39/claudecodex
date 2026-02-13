@@ -32,6 +32,16 @@ const CODEX_BACKUP_PATH = path.join(CODEX_DIR, 'config.toml.backup');
 // Store path for providers
 const STORE_PATH = path.join(app.getPath('userData'), 'providers.json');
 
+// Path for provider templates JSON
+const PROVIDER_TEMPLATES_PATH = (() => {
+  const isDev = process.env.NODE_ENV === 'development';
+  if (isDev) {
+    return path.join(__dirname, '../../providers.json');
+  }
+  // In production, look in the app resources directory
+  return path.join(process.resourcesPath || app.getAppPath(), 'providers.json');
+})();
+
 // Store current config type (claude or codex)
 const CONFIG_TYPE_PATH = path.join(app.getPath('userData'), 'config-type.json');
 
@@ -109,6 +119,35 @@ function readProviders(): unknown[] {
     console.error('Failed to read providers:', error);
   }
   return [];
+}
+
+// Read provider templates from JSON file
+function readProviderTemplates(): { claude: unknown[]; codex: unknown[] } {
+  try {
+    // First try the user data directory (for user customizations)
+    const userTemplatesPath = path.join(app.getPath('userData'), 'providers.json');
+    let data: string;
+    
+    if (fs.existsSync(userTemplatesPath)) {
+      data = fs.readFileSync(userTemplatesPath, 'utf-8');
+      console.log('✅ Loaded provider templates from user data');
+    } else if (fs.existsSync(PROVIDER_TEMPLATES_PATH)) {
+      data = fs.readFileSync(PROVIDER_TEMPLATES_PATH, 'utf-8');
+      console.log('✅ Loaded provider templates from app bundle');
+    } else {
+      console.warn('⚠️ Provider templates JSON not found, using defaults');
+      return { claude: [], codex: [] };
+    }
+    
+    const parsed = JSON.parse(data);
+    return {
+      claude: parsed.claude || [],
+      codex: parsed.codex || [],
+    };
+  } catch (error) {
+    console.error('Failed to read provider templates:', error);
+    return { claude: [], codex: [] };
+  }
 }
 
 // Write providers to store
@@ -503,6 +542,11 @@ function setupIpcHandlers(): void {
 
   ipcMain.handle('providers:write', (_, providers: unknown[]) => {
     return writeProviders(providers);
+  });
+
+  // Provider templates operations
+  ipcMain.handle('templates:read', () => {
+    return readProviderTemplates();
   });
 
   // Window operations

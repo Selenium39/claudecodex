@@ -33,6 +33,9 @@ export interface ElectronAPI {
   readProviders: () => Promise<unknown[]>;
   writeProviders: (providers: unknown[]) => Promise<boolean>;
 
+  // Provider templates operations
+  readTemplates: () => Promise<{ claude: unknown[]; codex: unknown[] }>;
+
   // Window operations
   hideWindow: () => Promise<void>;
   quitApp: () => Promise<void>;

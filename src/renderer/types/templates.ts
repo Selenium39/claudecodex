@@ -1,9 +1,10 @@
 // Provider Templates for ClaudeCodeX Electron
+// Templates are now loaded from providers.json file
 
-import { ProviderTemplate, createEnvValue } from './index';
+import { ProviderTemplate, createEnvValue, ConfigType, EnvValue } from './index';
 
-// ClaudeCode Provider Templates
-export const CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [
+// Default templates (fallback when JSON file is not available)
+const DEFAULT_CLAUDE_TEMPLATES: ProviderTemplate[] = [
   {
     name: 'Zhipu AI',
     envVariables: {
@@ -15,19 +16,6 @@ export const CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [
     },
     icon: 'ZhipuLogo',
     docLink: 'https://docs.bigmodel.cn/cn/coding-plan/tool/claude',
-    configType: 'claude',
-  },
-  {
-    name: 'z.ai',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.z.ai/api/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('glm-4.5-air', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('glm-4.7', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('glm-4.7', 'string'),
-    },
-    icon: 'ZaiLogo',
-    docLink: 'https://docs.z.ai/devpack/tool/claude',
     configType: 'claude',
   },
   {
@@ -46,21 +34,6 @@ export const CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [
     configType: 'claude',
   },
   {
-    name: 'MiniMax.io',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.minimax.io/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('MiniMax-M2', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('MiniMax-M2', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('MiniMax-M2', 'string'),
-      API_TIMEOUT_MS: createEnvValue('3000000', 'integer'),
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: createEnvValue('1', 'boolean'),
-    },
-    icon: 'MiniMaxLogo',
-    docLink: 'https://platform.minimax.io/docs/guides/text-ai-coding-tools',
-    configType: 'claude',
-  },
-  {
     name: 'Moonshot AI',
     envVariables: {
       ANTHROPIC_BASE_URL: createEnvValue('https://api.moonshot.cn/anthropic', 'string'),
@@ -71,96 +44,6 @@ export const CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [
     },
     icon: 'MoonshotLogo',
     docLink: 'https://platform.moonshot.cn/docs/guide/agent-support',
-    configType: 'claude',
-  },
-  {
-    name: 'Vanchin',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints/xxx/claude-code-proxy', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('KAT-Coder', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('KAT-Coder', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('KAT-Coder', 'string'),
-    },
-    icon: 'StreamLakeLogo',
-    docLink: 'https://www.streamlake.com/document/WANQING/me6ymdjrqv8lp4iq0o9',
-    configType: 'claude',
-  },
-  {
-    name: 'DeepSeek',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.deepseek.com/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('deepseek-chat', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('deepseek-chat', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('deepseek-chat', 'string'),
-      API_TIMEOUT_MS: createEnvValue('600000', 'integer'),
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: createEnvValue('1', 'boolean'),
-    },
-    icon: 'DeepSeekLogo',
-    docLink: 'https://api-docs.deepseek.com/',
-    configType: 'claude',
-  },
-  {
-    name: 'Aliyuncs',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://dashscope.aliyuncs.com/apps/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('qwen-flash', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('qwen-max', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('qwen-max', 'string'),
-    },
-    icon: 'AliyuncsLogo',
-    docLink: 'https://help.aliyun.com/zh/model-studio/developer-reference/use-qwen-by-calling-api',
-    configType: 'claude',
-  },
-  {
-    name: 'ModelScope',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api-inference.modelscope.cn', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('Qwen/Qwen3-Coder-480B-A35B-Instruct', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('Qwen/Qwen3-Coder-480B-A35B-Instruct', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('deepseek-ai/DeepSeek-R1-0528', 'string'),
-    },
-    icon: 'ModelScopeLogo',
-    docLink: 'https://modelscope.cn/docs/models/inference',
-    configType: 'claude',
-  },
-  {
-    name: 'PackyCode',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.packycode.com', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: createEnvValue('1', 'boolean'),
-    },
-    icon: 'PackyCodeLogo',
-    docLink: 'https://www.packycode.com/docs',
-    configType: 'claude',
-  },
-  {
-    name: 'AnyRouter',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://anyrouter.top', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-    },
-    icon: 'AnyRouterLogo',
-    docLink: 'https://docs.anyrouter.top/',
-    configType: 'claude',
-  },
-  {
-    name: 'LongCat',
-    envVariables: {
-      ANTHROPIC_BASE_URL: createEnvValue('https://api.longcat.chat/anthropic', 'string'),
-      ANTHROPIC_AUTH_TOKEN: createEnvValue('', 'string'),
-      ANTHROPIC_DEFAULT_HAIKU_MODEL: createEnvValue('LongCat-Flash-Chat', 'string'),
-      ANTHROPIC_DEFAULT_SONNET_MODEL: createEnvValue('LongCat-Flash-Chat', 'string'),
-      ANTHROPIC_DEFAULT_OPUS_MODEL: createEnvValue('LongCat-Flash-Thinking', 'string'),
-      CLAUDE_CODE_MAX_OUTPUT_TOKENS: createEnvValue('6000', 'integer'),
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: createEnvValue('1', 'boolean'),
-    },
-    icon: 'LongCatLogo',
-    docLink: 'https://longcat.chat/platform/docs/ClaudeCode.html',
     configType: 'claude',
   },
   {
@@ -177,47 +60,7 @@ export const CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [
   },
 ];
 
-// Codex Provider Templates
-export const CODEX_PROVIDER_TEMPLATES: ProviderTemplate[] = [
-  {
-    name: 'OpenAI',
-    envVariables: {
-      CODEX_BASE_URL: createEnvValue('https://api.openai.com/v1', 'string'),
-      CODEX_API_KEY: createEnvValue('', 'string'),
-      CODEX_MODEL: createEnvValue('gpt-5.2-codex', 'string'),
-      CODEX_MODEL_PROVIDER: createEnvValue('openai', 'string'),
-      CODEX_REASONING_EFFORT: createEnvValue('medium', 'string'),
-    },
-    icon: 'OpenAILogo',
-    docLink: 'https://platform.openai.com/docs',
-    configType: 'codex',
-  },
-  {
-    name: 'Zhipu AI (Codex)',
-    envVariables: {
-      CODEX_BASE_URL: createEnvValue('https://open.bigmodel.cn/api/paas/v4', 'string'),
-      CODEX_API_KEY: createEnvValue('', 'string'),
-      CODEX_MODEL: createEnvValue('glm-4', 'string'),
-      CODEX_MODEL_PROVIDER: createEnvValue('zhipu', 'string'),
-      CODEX_REASONING_EFFORT: createEnvValue('medium', 'string'),
-    },
-    icon: 'ZhipuLogo',
-    docLink: 'https://open.bigmodel.cn/dev/api',
-    configType: 'codex',
-  },
-  {
-    name: 'DeepSeek (Codex)',
-    envVariables: {
-      CODEX_BASE_URL: createEnvValue('https://api.deepseek.com/v1', 'string'),
-      CODEX_API_KEY: createEnvValue('', 'string'),
-      CODEX_MODEL: createEnvValue('deepseek-chat', 'string'),
-      CODEX_MODEL_PROVIDER: createEnvValue('deepseek', 'string'),
-      CODEX_REASONING_EFFORT: createEnvValue('medium', 'string'),
-    },
-    icon: 'DeepSeekLogo',
-    docLink: 'https://api-docs.deepseek.com/',
-    configType: 'codex',
-  },
+const DEFAULT_CODEX_TEMPLATES: ProviderTemplate[] = [
   {
     name: 'Custom Codex',
     envVariables: {
@@ -232,11 +75,89 @@ export const CODEX_PROVIDER_TEMPLATES: ProviderTemplate[] = [
   },
 ];
 
+// Raw template data from JSON (without configType)
+interface RawProviderTemplate {
+  name: string;
+  envVariables: Record<string, { value: string; type: string }>;
+  icon: string;
+  docLink?: string;
+}
+
+interface ProvidersJson {
+  claude: RawProviderTemplate[];
+  codex: RawProviderTemplate[];
+}
+
+// Convert raw template to ProviderTemplate with proper EnvValue types
+function convertRawTemplate(raw: RawProviderTemplate, configType: ConfigType): ProviderTemplate {
+  const envVariables: Record<string, EnvValue> = {};
+  
+  for (const [key, value] of Object.entries(raw.envVariables)) {
+    envVariables[key] = createEnvValue(value.value, value.type as 'string' | 'integer' | 'boolean');
+  }
+  
+  return {
+    name: raw.name,
+    envVariables,
+    icon: raw.icon,
+    docLink: raw.docLink,
+    configType,
+  };
+}
+
+// Global template cache
+let CLAUDE_PROVIDER_TEMPLATES: ProviderTemplate[] = [...DEFAULT_CLAUDE_TEMPLATES];
+let CODEX_PROVIDER_TEMPLATES: ProviderTemplate[] = [...DEFAULT_CODEX_TEMPLATES];
+let templatesLoaded = false;
+
+// Load templates from JSON file (called from main process)
+export function loadTemplatesFromJson(jsonData: ProvidersJson): void {
+  const claude = jsonData.claude?.map(t => convertRawTemplate(t, 'claude')) || DEFAULT_CLAUDE_TEMPLATES;
+  const codex = jsonData.codex?.map(t => convertRawTemplate(t, 'codex')) || DEFAULT_CODEX_TEMPLATES;
+  
+  CLAUDE_PROVIDER_TEMPLATES = claude;
+  CODEX_PROVIDER_TEMPLATES = codex;
+  templatesLoaded = true;
+}
+
+// Async load templates from Electron main process
+export async function loadTemplates(): Promise<void> {
+  if (templatesLoaded) return;
+  
+  const isElectron = typeof window !== 'undefined' && window.electronAPI;
+  if (isElectron) {
+    try {
+      const data = await window.electronAPI.readTemplates();
+      loadTemplatesFromJson(data as ProvidersJson);
+    } catch (error) {
+      console.error('Failed to load templates:', error);
+    }
+  }
+  templatesLoaded = true;
+}
+
+// Export getters for templates
+export function getClaudeProviderTemplates(): ProviderTemplate[] {
+  return CLAUDE_PROVIDER_TEMPLATES;
+}
+
+export function getCodexProviderTemplates(): ProviderTemplate[] {
+  return CODEX_PROVIDER_TEMPLATES;
+}
+
+// Get templates by config type
+export function getTemplatesByType(configType: ConfigType): ProviderTemplate[] {
+  return configType === 'codex' ? CODEX_PROVIDER_TEMPLATES : CLAUDE_PROVIDER_TEMPLATES;
+}
+
 // Combined templates for backward compatibility
 export const PROVIDER_TEMPLATES: ProviderTemplate[] = [
   ...CLAUDE_PROVIDER_TEMPLATES,
   ...CODEX_PROVIDER_TEMPLATES,
 ];
+
+// Re-export for compatibility (these will be updated after loadTemplates is called)
+export { CLAUDE_PROVIDER_TEMPLATES, CODEX_PROVIDER_TEMPLATES };
 
 export function inferIconFromUrl(baseUrl: string): string {
   if (!baseUrl) return 'ClaudeLogo';
@@ -246,7 +167,8 @@ export function inferIconFromUrl(baseUrl: string): string {
     const host = url.host.replace(/^www\./, '');
 
     // Match with template hosts first
-    for (const template of PROVIDER_TEMPLATES) {
+    const allTemplates = [...CLAUDE_PROVIDER_TEMPLATES, ...CODEX_PROVIDER_TEMPLATES];
+    for (const template of allTemplates) {
       const templateUrl = template.envVariables.ANTHROPIC_BASE_URL?.value || template.envVariables.CODEX_BASE_URL?.value;
       if (templateUrl) {
         try {
@@ -287,8 +209,9 @@ export function inferTemplateFromProvider(envVariables: Record<string, { value: 
 
   try {
     const providerHost = new URL(baseUrl).host.replace(/^www\./, '');
+    const allTemplates = [...CLAUDE_PROVIDER_TEMPLATES, ...CODEX_PROVIDER_TEMPLATES];
 
-    return PROVIDER_TEMPLATES.find((template) => {
+    return allTemplates.find((template) => {
       const templateUrl = template.envVariables.ANTHROPIC_BASE_URL?.value || template.envVariables.CODEX_BASE_URL?.value;
       if (!templateUrl) return false;
       try {

@@ -1,11 +1,12 @@
 // Main App Component
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider, AppView } from './types';
 import { useProviderStore } from './hooks/useProviderStore';
 import { ProviderRow, DefaultProviderRow } from './components/ProviderRow';
 import { AddEditProviderView } from './components/AddEditProviderView';
 import { ProviderIcon } from './components/ProviderIcon';
+import { loadTemplates } from './types/templates';
 import AppIcon from './assets/Icon.png';
 import './App.css';
 
@@ -14,6 +15,11 @@ const isElectron = typeof window !== 'undefined' && window.electronAPI;
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>({ type: 'main' });
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+
+  // Load provider templates on mount
+  useEffect(() => {
+    loadTemplates();
+  }, []);
 
   const {
     providers,
@@ -76,6 +82,7 @@ export const App: React.FC = () => {
     return (
       <div className="app loading">
         <div className="spinner" />
+        <p className="loading-text">Loading...</p>
       </div>
     );
   }

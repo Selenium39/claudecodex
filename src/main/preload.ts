@@ -42,6 +42,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   writeProviders: (providers: unknown[]) =>
     ipcRenderer.invoke('providers:write', providers),
 
+  // Provider templates operations
+  readTemplates: () => ipcRenderer.invoke('templates:read'),
+
   // Window operations
   hideWindow: () => ipcRenderer.invoke('window:hide'),
   quitApp: () => ipcRenderer.invoke('window:quit'),
