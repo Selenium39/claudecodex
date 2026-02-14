@@ -57,7 +57,7 @@ export function loadTemplatesFromJson(jsonData: ProvidersJson): void {
 export async function loadTemplates(): Promise<void> {
   console.log('🔄 loadTemplates called, templatesLoaded:', templatesLoaded);
   if (templatesLoaded) return;
-  
+
   const isElectron = typeof window !== 'undefined' && window.electronAPI;
   console.log('🔄 isElectron:', isElectron);
   if (isElectron) {
@@ -65,11 +65,13 @@ export async function loadTemplates(): Promise<void> {
       const data = await window.electronAPI.readTemplates();
       console.log('🔄 Received data from main:', data);
       loadTemplatesFromJson(data as ProvidersJson);
+      templatesLoaded = true;
     } catch (error) {
       console.error('Failed to load templates:', error);
+      // Don't set templatesLoaded on error, so we can retry
     }
   }
-  templatesLoaded = true;
+  // Note: templatesLoaded is only set after successful load
 }
 
 // Export getters for templates
